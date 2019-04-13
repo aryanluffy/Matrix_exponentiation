@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+#define lli long long int
+#define f(x,y,z) for(x=y;x<z;x++)
+#define mod 1000000007
+using namespace std;
+struct matrix
+{
+    vector <vector <lli>>m;
+};
+void mresize(matrix &m,int i,int j)
+{   int u;
+    m.m.resize(i);
+    f(u,0,i)
+       m.m[u].resize(j);
+}
+void minitialize(matrix &m,lli x)
+{
+    int i,j;
+    f(i,0,m.m.size())
+       f(j,0,m.m[0].size())
+           m.m[i][j]=x;
+}
+matrix mxmultiply(matrix m1,matrix m2)
+{
+    matrix m3;
+    mresize(m3,m1.m.size(),m2.m[0].size());
+    int i,j,k;
+    f(i,0,m3.m.size())
+      {
+          f(j,0,m3.m[0].size())
+          {    m3.m[i][j]=0;
+               f(k,0,m1.m[0].size())
+                 m3.m[i][j]=(m3.m[i][j]+m1.m[i][k]*m2.m[k][j])%mod;
+          }
+      }
+      return m3;
+}
+matrix mexp(matrix &mx,lli p)
+{
+   matrix res;
+   if(p==1)
+      return mx;
+   if(p==0)
+   {
+       mresize(res,mx.m.size(),mx.m.size());
+       minitialize(res,0);
+       for(int i=0;i<mx.m.size();i++)
+          res.m[i][i]=1;
+       return res;
+   }
+      if(p%2==0)
+      {
+          res=mexp(mx,p/2);
+          res=mxmultiply(res,res);
+      }
+      else
+      {
+          res=mexp(mx,p/2);
+          res=mxmultiply(res,res);
+          res=mxmultiply(res,mx);
+      }
+   return res;
+}
+
+int main()
+{
+
+    return 0;
+}
